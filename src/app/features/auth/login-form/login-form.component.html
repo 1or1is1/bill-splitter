@@ -1,0 +1,64 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="main-form">
+  <div class="row">
+    <div class="col-12">
+      <mat-form-field class="form-full-width">
+        <mat-label>Email</mat-label>
+        <input
+          type="email"
+          matInput
+          placeholder="Ex. test@example.com"
+          formControlName="email"
+        />
+        <mat-error
+          *ngIf="
+            emailFormControl?.hasError('email') &&
+            !emailFormControl?.hasError('required')
+          "
+        >
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="emailFormControl?.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-12">
+      <mat-form-field class="form-full-width">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="hide ? 'password' : 'text'"
+          formControlName="password"
+        />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="hide = !hide"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide"
+        >
+          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+        <mat-error
+          *ngIf="
+            passwordFormControl?.hasError('minlength') &&
+            !passwordFormControl?.hasError('required')
+          "
+        >
+          Please enter at-least 6 digit password
+        </mat-error>
+        <mat-error *ngIf="passwordFormControl?.hasError('required')">
+          Password is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="d-flex justify-content-between">
+      <button mat-raised-button type="submit" [disabled]="loginForm.invalid || loading" color="primary">
+        {{ currentState === 'login' ? 'Log In' : 'Sign Up' }}
+      </button>
+      <p class="m-0" *ngIf="currentState === 'login'">Create new account ?<a routerLink="/signup" mat-button>New User</a></p>
+      <p class="m-0" *ngIf="currentState === 'signup'">Already registered ?<a routerLink="/login" mat-button>Login</a></p>
+    </div>
+  </div>
+</form>
