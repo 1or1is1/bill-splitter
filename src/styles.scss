@@ -8,11 +8,78 @@
 // Be sure that you only ever include this mixin once!
 @include mat.core();
 
+/* For use in src/lib/core/theming/_palette.scss */
+$md-primary: (
+  50: #e5f4f3,
+  100: #bee4e1,
+  200: #93d3cd,
+  300: #67c1b8,
+  400: #47b3a9,
+  500: #26a69a,
+  600: #229e92,
+  700: #1c9588,
+  800: #178b7e,
+  900: #0d7b6c,
+  A100: #adfff3,
+  A200: #7affec,
+  A400: #47ffe4,
+  A700: #2dffe0,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+$md-accent: (
+  50: #f1eff8,
+  100: #ddd8ed,
+  200: #c7bee1,
+  300: #b0a3d5,
+  400: #9f90cc,
+  500: #8e7cc3,
+  600: #8674bd,
+  700: #7b69b5,
+  800: #715fae,
+  900: #5f4ca1,
+  A100: #fefeff,
+  A200: #d6cbff,
+  A400: #ae98ff,
+  A700: #9a7fff,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #000000,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$bill-split-primary: mat.define-palette(mat.$indigo-palette);
-$bill-split-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$bill-split-primary: mat.define-palette($md-primary);
+$bill-split-accent: mat.define-palette($md-accent);
 
 // The warn palette is optional (defaults to red).
 $bill-split-warn: mat.define-palette(mat.$red-palette);
@@ -46,7 +113,7 @@ $bill-split-theme: mat.define-light-theme(
 
 html,
 body {
-  height: 100%;
+  height: 100vh;
 }
 
 html {
@@ -56,4 +123,5 @@ html {
 body {
   box-sizing: border-box;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #93d3cd !important;
 }
