@@ -1,0 +1,13 @@
+mat-form-field {
+  width: 100%;
+}
+
+.position-note-parent {
+  position: relative;
+
+  .position-note {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}

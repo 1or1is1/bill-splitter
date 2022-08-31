@@ -1,0 +1,7 @@
+<mat-card>
+  <mat-card-title class="bg-dark bg-opacity-10 p-4 rounded-2 text-center">Other Information</mat-card-title>
+  <mat-card-content>
+    <p class="fs-3">You have paid <span class="fw-bold">{{ amountPaid | currency : 'INR'}}</span>, until today.</p>
+    <p class="fs-3">You still have to pay <span class="fw-bold">{{ amountYetToPay | currency : 'INR' }}</span></p>
+  </mat-card-content>
+</mat-card>

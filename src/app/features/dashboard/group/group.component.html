@@ -1,0 +1,82 @@
+<mat-expansion-panel
+  (opened)="panelOpenState = true"
+  (closed)="panelOpenState = false"
+  class="mb-2"
+>
+  <mat-expansion-panel-header>
+    <mat-panel-title class="fw-bold"
+      >Group Name :
+      {{ groupDetailsForm.get("groupName").value }}</mat-panel-title
+    >
+    <mat-panel-description class="fw-bold">
+      Trip Cost : {{ groupDetailsForm.get("tripCost").value | currency : 'INR' }}
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <!-- START -->
+  <form [formGroup]="groupDetailsForm" class="d-flex flex-column">
+    <div class="d-flex flex-column flex-md-row">
+      <mat-form-field class="me-0 me-md-3">
+        <mat-label>Group Name</mat-label>
+        <input matInput formControlName="groupName" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Trip Cost</mat-label>
+        <span matPrefix>Rs.&nbsp;</span>
+        <input type="number" matInput formControlName="tripCost" />
+      </mat-form-field>
+    </div>
+    <div class="d-flex flex-column">
+      <p class="bg-dark p-3 fw-bold bg-opacity-10">
+        Member Details
+        >
+      </p>
+      <ng-container
+        formArrayName="members"
+        *ngFor="let member of allMembersControl; let idx = index"
+      >
+        <div
+          class="d-flex flex-column p-2 p-md-4 mb-3 mb-md-4 bg-warning bg-opacity-10"
+          [class.mat-elevation-z2]="true"
+          [formGroup]="member"
+        >
+          <div class="d-flex flex-column flex-md-row">
+            <mat-form-field class="me-0 me-md-3">
+              <mat-label>{{ member.get('owner').value === true ? 'Owner ' : '' }}Name</mat-label>
+              <input type="text" matInput formControlName="memberName" />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Email</mat-label>
+              <input type="email" matInput formControlName="memberEmail" />
+            </mat-form-field>
+          </div>
+          <div class="d-flex flex-column flex-md-row">
+            <mat-form-field class="me-0 me-md-3 highlight-red">
+              <mat-label class="fw-bold">Balance Amount</mat-label>
+              <input
+                type="number"
+                matInput
+                formControlName="balanceAmount"
+                [disabled]="true"
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Amount Paid</mat-label>
+              <input type="email" matInput formControlName="amountPaid" (blur)="onAmountPaid(idx)" />
+            </mat-form-field>
+          </div>
+        </div>
+      </ng-container>
+      <div class="d-flex flex-row justify-content-end">
+        <button
+          mat-raised-button
+          color="primary"
+          aria-label="Saving Changes"
+          type="button"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </form>
+  <!-- END -->
+</mat-expansion-panel>

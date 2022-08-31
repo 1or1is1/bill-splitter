@@ -1,2 +1,20 @@
-<p>dashboard works!</p>
-<a mat-raised-button (click)="logout()">Logout</a>
+<div class="row rounded p-md-4 p-2 change-bg" [class.mat-elevation-z2]="true">
+  <div class="col-12 p-0" [class.mat-elevation-z2]="true">
+    <mat-toolbar class="rounded text-body">
+      <span>Dashboard</span>
+      <span class="spacer"></span>
+      <button
+        mat-raised-button
+        aria-label="Logout Button"
+        (click)="logout()"
+        type="button"
+        color="primary"
+      >
+        Logout
+      </button>
+    </mat-toolbar>
+  </div>
+  <div class="col-12 p-0 mt-2">
+    <app-groups></app-groups>
+  </div>
+</div>

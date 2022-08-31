@@ -1,0 +1,66 @@
+<form
+  mat-dialog-content
+  class="d-flex flex-column"
+  [formGroup]="groupDetailsForm"
+>
+  <p class="bg-dark p-3 fw-bold bg-opacity-10">Enter Group Details</p>
+  <mat-form-field>
+    <mat-label>Group Name</mat-label>
+    <input matInput formControlName="groupName" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Trip Cost</mat-label>
+    <span matPrefix>Rs.&nbsp;</span>
+    <input type="number" matInput formControlName="tripCost" />
+  </mat-form-field>
+  <div class="d-flex flex-column">
+    <p class="bg-dark p-3 fw-bold bg-opacity-10 position-note-parent">
+      Member Details
+      <span class="fw-semibold text-danger fs-6 float-end position-note"
+        >*Double Click to delete member</span
+      >
+    </p>
+    <ng-container
+      formArrayName="members"
+      *ngFor="let member of allMembersControl; let idx = index"
+    >
+      <div
+        class="mb-3 d-flex flex-column p-3 p-md-4 pb-0 pb-md-0 bg-warning bg-opacity-10"
+        [class.mat-elevation-z2]="true"
+        [formGroup]="member"
+        (dblclick)="deleteItem(idx)"
+      >
+        <mat-form-field>
+          <mat-label>{{ member.get('owner').value === true ? 'Owner ' : '' }}Name</mat-label>
+          <input type="text" matInput formControlName="memberName" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Email</mat-label>
+          <input type="email" matInput formControlName="memberEmail" />
+        </mat-form-field>
+      </div>
+    </ng-container>
+    <div class="col-12">
+      <button
+        class="w-100 mb-2"
+        mat-flat-button
+        color="primary"
+        aria-label="Add New Group Members"
+        (click)="onAddButton()"
+        type="button"
+      >
+        Click here to ADD members
+      </button>
+    </div>
+  </div>
+</form>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button
+    mat-button
+    [mat-dialog-close]="groupDetailsForm.value"
+    [disabled]="!groupDetailsForm.valid"
+  >
+    Ok
+  </button>
+</div>
