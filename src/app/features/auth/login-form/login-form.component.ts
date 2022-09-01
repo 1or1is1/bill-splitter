@@ -50,7 +50,6 @@ export class LoginFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log(this.loginForm.value);
     this.formData.emit(this.loginForm.value);
   }
 

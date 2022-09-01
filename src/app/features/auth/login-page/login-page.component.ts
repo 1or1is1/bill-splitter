@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { LoginDetails } from 'src/app/models/login-details.interface';
 
@@ -15,7 +16,8 @@ export class LoginPageComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) { 
     this.loading = false;
   }
@@ -32,9 +34,18 @@ export class LoginPageComponent implements OnInit {
       },
       err => {
         this.loading = false;
-        alert('Login FAILED!');
+        this.openSnackBar("Login Failed, Please enter correct Email and Password", "OK");
       }
     );
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+      verticalPosition: 'top',
+      horizontalPosition: 'end',
+      panelClass: 'bg-danger'
+    });
   }
 
 }
