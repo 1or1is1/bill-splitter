@@ -6,8 +6,9 @@ import { User } from '../models/user-interface';
 import { getSignInURL, getSignUpURL } from '../config/firebase.config';
 import { LoginDetails } from '../models/login-details.interface';
 import { Router } from '@angular/router';
+import { GroupDetail } from '../models/group-interface';
 
-const AUTH_USER = 'auth_user'
+export const AUTH_USER = 'auth_user'
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ const AUTH_USER = 'auth_user'
 export class AuthService {
 
   private subject = new BehaviorSubject<User>(null);
+  private userId: string = null;
   user$: Observable<User> = this.subject.asObservable();
   isLoggedIn$: Observable<boolean>;
   isLoggedOut$: Observable<boolean>;
@@ -25,8 +27,9 @@ export class AuthService {
     this.isLoggedOut$ = this.isLoggedIn$.pipe(map(loggedIn => !loggedIn));
     const user = localStorage.getItem(AUTH_USER);
     if (user) {
-      // TODO : Add logic for validating TOKEN Details
-      this.subject.next(JSON.parse(user));
+      const userObj = JSON.parse(user);
+      this.subject.next(userObj);
+      this.userId = userObj?.localId;
     }
 
   }
@@ -53,6 +56,7 @@ export class AuthService {
         tap(user => {
           this.subject.next(user);
           localStorage.setItem(AUTH_USER, JSON.stringify(user));
+          this.userId = user?.localId;
         }),
         shareReplay()
       );
@@ -62,6 +66,40 @@ export class AuthService {
     this.subject.next(null);
     localStorage.removeItem(AUTH_USER);
     this.router.navigate(['/login']);
+  }
+
+  setGroupData(group: GroupDetail) {
+    let groups: GroupDetail[] = [];
+    if (localStorage.getItem(this.userId) === null) {
+      localStorage.setItem(this.userId, JSON.stringify(groups));
+    }
+
+    groups = JSON.parse(localStorage.getItem(this.userId));
+    groups.push(group);
+    localStorage.setItem(this.userId, JSON.stringify(groups));
+
+  }
+
+  setParticularGroupData(index: number, group: GroupDetail) {
+    let groups: GroupDetail[] = [];
+    if (localStorage.getItem(this.userId) === null) {
+      localStorage.setItem(this.userId, JSON.stringify(groups));
+    }
+    groups = JSON.parse(localStorage.getItem(this.userId));
+    groups[index] = group;
+    localStorage.setItem(this.userId, JSON.stringify(groups));
+  }
+
+  getGroupData(): GroupDetail[] {
+    let groups: GroupDetail[] = [];
+    if (localStorage.getItem(this.userId) === null) {
+      localStorage.setItem(this.userId, JSON.stringify(groups));
+    }
+
+    groups = JSON.parse(localStorage.getItem(this.userId));
+
+    return groups;
+
   }
 
 }

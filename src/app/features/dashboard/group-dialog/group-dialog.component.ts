@@ -35,7 +35,6 @@ export class GroupDialogComponent implements OnInit {
       memberEmail: ['', [Validators.email, Validators.required]],
       amountPaid: ['', Validators.min(0)],
       balanceAmount: ['', Validators.min(0)],
-      originalBalanceAmount: [''],
       owner: [owner]
     });
     members.push(newMember);

@@ -1,6 +1,7 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, Output , OnInit, EventEmitter } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { GroupDetail } from 'src/app/models/group-interface';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-group',
@@ -12,10 +13,18 @@ export class GroupComponent implements OnInit {
   @Input()
   group: GroupDetail;
 
+  @Input()
+  index: number;
+
+  @Output()
+  calculateGeneral = new EventEmitter<void>();
+
+  valid: boolean = true;
+
   panelOpenState: boolean = false;
   groupDetailsForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -32,7 +41,6 @@ export class GroupComponent implements OnInit {
         memberEmail: [member.memberEmail, [Validators.email, Validators.required]],
         amountPaid: [member.amountPaid, Validators.min(0)],
         balanceAmount: new FormControl({ value: member.balanceAmount, disabled: true }),
-        originalBalanceAmount: new FormControl({ value: member.balanceAmount, disabled: true }),
         owner: [member.owner]
       });
       members.push(newMember);
@@ -43,13 +51,19 @@ export class GroupComponent implements OnInit {
   }
 
   onAmountPaid(ind : number) {
+    this.valid = true;
     const member: AbstractControl = this.allMembersControl[ind];
-    let balanceAmount = +(member.get('originalBalanceAmount').value - member.get('amountPaid').value).toFixed(2);
+    let balanceAmount = +(member.get('balanceAmount').value - member.get('amountPaid').value).toFixed(2);
     if (balanceAmount < 0) {
+      this.valid = false;
       alert("Amount Paid cannot be greater then Balance Amount, for Member : "+member.get('memberName').value);
       return;
     }
-    member.get('balanceAmount').setValue(balanceAmount);
+  }
+
+  onSave() {
+    this.authService.setParticularGroupData(this.index, this.groupDetailsForm.getRawValue());
+    this.calculateGeneral.emit();
   }
 
   get allMembers() {

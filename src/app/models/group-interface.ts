@@ -7,6 +7,5 @@ export interface GroupDetail {
         amountPaid: number;
         balanceAmount: number;
         owner: boolean;
-        originalBalanceAmount: number;
     }[]
 }

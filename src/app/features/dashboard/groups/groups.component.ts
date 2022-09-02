@@ -3,6 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { GroupDetail } from 'src/app/models/group-interface';
 import { GroupDialogComponent } from '../group-dialog/group-dialog.component';
 
+import { AuthService, AUTH_USER } from '../../../services/auth.service';
+
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
@@ -16,11 +18,12 @@ export class GroupsComponent implements OnInit {
   amountPaid: number = 0;
   amountYetToPay: number = 0;
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private authService : AuthService) { }
 
   ngOnInit(): void {
-    this.groups = [];
+    this.groups = this.authService.getGroupData();
     this.calculateTotalTripCost();
+    this.calculateGeneralAmount();
   }
 
   onAddNewGroup(): void {
@@ -36,21 +39,28 @@ export class GroupsComponent implements OnInit {
         this.groups.push(result);
         this.calculateTotalTripCost();
         this.calculateGeneralAmount();
+        this.authService.setGroupData(result);
       }
     });
   }
 
-  calculateGeneralAmount() {
+  calculateGeneralAmount(reset: boolean = false) {
+    if (reset) {
+      this.groups = this.authService.getGroupData();
+      this.calculateTotalTripCost();
+    }
+    let totalBalance = 0;
     this.amountYetToPay = 0;
     this.amountPaid = 0;
     for (let group of this.groups) {
       for (let member of group.members) {
         if (member.owner) {
-          this.amountPaid += member.amountPaid;
-          this.amountYetToPay += member.originalBalanceAmount;
+          this.amountPaid += (+member.amountPaid);
+          totalBalance += member.balanceAmount;
         }
       }
     }
+    this.amountYetToPay = totalBalance - this.amountPaid;
   }
 
   calculateBalanceAmount(result: GroupDetail) {
@@ -58,7 +68,6 @@ export class GroupsComponent implements OnInit {
     for (let member of result.members) {
       member.amountPaid = 0;
       member.balanceAmount = costPerMember;
-      member.originalBalanceAmount = member.balanceAmount;
     }
   }
 

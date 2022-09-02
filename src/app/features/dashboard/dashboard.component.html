@@ -9,12 +9,13 @@
         (click)="logout()"
         type="button"
         color="primary"
+        *ngIf="auth.isLoggedIn$ | async"
       >
         Logout
       </button>
     </mat-toolbar>
   </div>
-  <div class="col-12 p-0 mt-2">
+  <div class="col-12 p-0 mt-2" *ngIf="auth.isLoggedIn$ | async">
     <app-groups></app-groups>
   </div>
 </div>

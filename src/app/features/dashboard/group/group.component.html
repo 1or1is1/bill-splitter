@@ -72,6 +72,8 @@
           color="primary"
           aria-label="Saving Changes"
           type="button"
+          (click)="onSave()"
+          [disabled]="!valid || groupDetailsForm.invalid"
         >
           Save
         </button>
